@@ -1,0 +1,34 @@
+%YAML 1.2
+---
+# SimpleLogger Log Syntax Definition
+
+name: BranchLog
+file_extensions:
+  - bl
+scope: source.bl
+
+contexts:
+  main:
+    - match: 'Processing line:'
+      scope: keyword.processing.bl
+      push: line_content
+    - match: 'Error:'
+      scope: keyword.error.bl
+      push: line_content
+    - match: 'Identified package:'
+      scope: keyword.package.bl
+      push: line_content
+    - match: 'Entering struct:'
+      scope: keyword.struct.bl
+      push: line_content
+    - match: 'Stored struct:'
+      scope: keyword.stored.bl
+      push: line_content
+    - match: 'Path not found:'
+      scope: keyword.path_not_found.bl
+      push: line_content
+
+  line_content:
+    - match: '.*\n'
+      scope: string.content.simplelogger
+      pop: true

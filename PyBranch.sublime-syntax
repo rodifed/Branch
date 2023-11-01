@@ -1,0 +1,41 @@
+%YAML 1.2
+---
+name: Branch
+file_extensions:
+  - b
+scope: source.b
+
+contexts:
+  main:
+    - match: '@Package'
+      scope: keyword.package.b
+      push: package-name
+    - match: '@Branch'
+      scope: keyword.branch.b
+      push: branch-definition
+
+  package-name:
+    - match: '\w+'
+      scope: entity.name.package.b
+      pop: true
+
+  branch-definition:
+    - match: 'struct\s+(\w+)\s*:\s*(\w+)'
+      captures:
+        1: entity.name.struct.b
+        2: entity.other.inherited-class.b
+      push: branch-content
+      scope: keyword
+    - match: '\}'
+      scope: punctuation.brace.close.b
+      pop: true
+
+  branch-content:
+    - include: main
+    #- include: 'Packages/Markdown/Markdown.sublime-syntax'
+    - match: '\{'
+      push: branch-content
+    - match: '\}'
+      pop: true
+    - match: '.'
+      scope: text.Branch
